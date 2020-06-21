@@ -35,10 +35,10 @@
 							<slot name="footer"></slot>
 						</div>
 					</template>
-					<table class="footer" :class="[opt.border ? 'border' : '']" v-else style="margin-right:17px;">
+					<table class="footer" :class="[opt.border ? 'border' : '']" v-else >
 						<tr>
 							<template v-if="!opt.showSummaryVal">
-								<td v-for="(item,index) in computedColumn" :key="item.key" :align="item.align || 'left'" :width="item.width">
+								<td v-for="(item,index) in computedColumn" :title="getSummaries(scope)[index] || ''" :key="item.key" :align="item.align || 'left'" :width="item.width">
 									{{getSummaries(scope)[index] || ''}}
 								</td>
 							</template>
@@ -48,7 +48,7 @@
 								</td>
 							</template>
 						</tr>
-					</table>
+					</table> 
 				 </template>
 			</a-table>
 		</a-config-provider>
@@ -519,6 +519,9 @@
 		}
 		td{
 			padding:16px;
+			white-space:nowrap;
+			overflow:hidden;
+			text-overflow:ellipsis;
 			&:last-child{
 				border:none;
 			}
