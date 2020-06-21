@@ -10,14 +10,6 @@
 			</template>
 			<!-- <template slot="footer">footer</template> -->
 		</Table>
-		<Table ref="table" @mouseleave="mouseleave" @mouseenter="mouseenter" @select-all="selectAll" :data="tableData" :opt="tableOpt2" class="formBox" :columns="columns" :page="page"  @selection-change="selectionChange">
-			<template slot="pannel-top">
-				我是slot
-			</template>
-			
-			<!-- <template slot="footer">footer</template> -->
-		</Table>
-	
 	</div>
 </template>
 
@@ -125,6 +117,7 @@
 					spanMethod:true,
 					border:true,
 					stripe:true,
+					tableTop:true,
 					// showSummaryText:'你猜',
 					showSelectText:true,
 					showTextIndex:1,

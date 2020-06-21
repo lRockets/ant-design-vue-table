@@ -1,6 +1,6 @@
 <template>
 	<div class="table" :style="{height:opt.height,width:opt.width,position:'relative'}" :class="[!opt.showSummary ? 'hideSummary' : '',`table${id}`]">
-		<div class="table-top">
+		<div class="table-top" v-if="opt.tableTop">
 			<span style="margin-left: 8px" class="top-tool">
 				<template v-if="opt.showSelectText">共{{page.total}}条数据,<span>已选择{{selectedRowKeys.length}}条</span></template>
 			</span>
@@ -185,20 +185,23 @@
 		},
 		methods: {
 			setTableHeight(){
-				let headerHeight=0,footerHeight=0;
+				let headerHeight=0,footerHeight=0,tableTop=0;
+				if(document.querySelector(`.table${this.id}`).querySelector('.table-top')){
+					tableTop=document.querySelector(`.table${this.id}`).querySelector('.table-top').offsetHeight;
+				}
 				if(document.querySelector(`.table${this.id}`).querySelector('.ant-table-fixed')){
 					headerHeight=document.querySelector('.ant-table-fixed').offsetHeight;
 				}
 				if(document.querySelector(`.table${this.id}`).querySelector('.ant-table-footer')){
 					footerHeight=this.opt.showSummary ? document.querySelector('.ant-table-footer').offsetHeight : 0
 				}
-				let pagination=this.opt.page ? 32 : 0;
-				this.computedHeight=parseFloat(this.opt.height) - headerHeight - footerHeight - pagination;  //计算表格高度
+				let pagination=this.opt.page ? 64 : 0;
+				this.computedHeight=parseFloat(this.opt.height) - headerHeight - footerHeight - pagination -tableTop;  //计算表格高度
 				if(document.querySelector(`.table${this.id}`).querySelector('.ant-table-placeholder')){
-					console.log(111111111)
 					document.querySelector(`.table${this.id}`).querySelector('.ant-table-placeholder').style.height=this.computedHeight+'px';
 					return;
 				}
+				console.log(headerHeight,footerHeight,pagination)
 				document.querySelector(`.table${this.id}`).querySelector('.ant-table-body').style.height=this.computedHeight+'px';
 			},
 			reload: function(data) {
@@ -355,8 +358,6 @@
 	
 .table{
 	display:flex;
-	display: block;
-	margin:0 auto;
 	position:relative;
 	flex-direction: column;
 	::v-deep .ant-table-wrapper{
@@ -364,6 +365,8 @@
 	}
 	.table-top{
 		padding:10px 0;
+		width:100%;
+		display: block;
 	}
 	.top-tool{
 		font-size:14px;
@@ -375,7 +378,7 @@
 	.checkAll{
 		position:absolute;
 		left:0;
-		bottom:-50px;
+		bottom:23px;
 		z-index:10;
 	}
 	&.hideSummary{
