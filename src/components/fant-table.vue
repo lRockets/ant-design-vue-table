@@ -449,6 +449,11 @@
 			border-bottom:none !important;
 		}
 	}
+	::v-deep .ant-table-header-column{
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+	}
 	::v-deep .ant-table-scroll{
 		overflow: hidden !important; 
 	}
