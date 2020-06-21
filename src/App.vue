@@ -1,15 +1,17 @@
 <template>
 	<div id="app">
 		<a-button type="primary">1</a-button>
-		<Table style="margin-bottom:300px;" ref="table" @mouseleave="mouseleave" @mouseenter="mouseenter" @select-all="selectAll" :data="tableData" :opt="tableOpt" class="formBox" :columns="columns" :page="page"  @selection-change="selectionChange">
-			<template slot="pannel-top">
-				我是slot
-			</template>
-			<template slot="paginationLeft">
-				<!-- foot_left -->
-			</template>
-			<!-- <template slot="footer">footer</template> -->
-		</Table>
+		<div class="main-table" ref="main">
+			<Table style="margin-bottom:300px;" ref="table" @mouseleave="mouseleave" @mouseenter="mouseenter" @select-all="selectAll" :data="tableData" :opt="tableOpt" class="formBox" :columns="columns" :page="page"  @selection-change="selectionChange">
+				<template slot="pannel-top">
+					我是slot
+				</template>
+				<template slot="paginationLeft">
+					<!-- foot_left -->
+				</template>
+				<!-- <template slot="footer">footer</template> -->
+			</Table>
+		</div>
 	</div>
 </template>
 
@@ -131,7 +133,7 @@
 					checkOnSelect: true,
 					// showSummaryVal:[1,2,3,4,5,6,7],
 					url: '/web/room/page',
-					height: "500px",
+					height: "100%",
 					extendParams: {
 						buildingId: ''
 					}
@@ -186,7 +188,6 @@
 			}
 		},
 		mounted(){
-			console.log(this.$refs.table)
 		},
 		methods: {
 			mouseenter(row){
@@ -206,5 +207,13 @@
 	}
 </script>
 <style lang="scss">
-
+#app{
+	display:flex;
+	overflow: hidden;
+	height:100vh;
+	flex-direction: column;
+	.main-table{
+		flex:1;
+	}
+}
 </style>

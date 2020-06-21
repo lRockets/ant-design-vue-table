@@ -24,7 +24,7 @@
 				:rowSelection="opt.multiple ? {type:'checkbox',onChange:onSelectChange,selectedRowKeys,onSelectAll} : undefined"
 				:loading="opt.loading" 
 				:row-key="opt.rowKey || 'id'"
-				:scroll="{ x: '100%', y: computedHeight }"
+				:scroll="opt.height ? { x: '100%', y: computedHeight } : {x:'100%'}"
 				 @change="pageChange"
 				 :rowClassName="rowClass"
 				:customRow="onClickRow">
@@ -155,8 +155,10 @@
 			}
 		},
 		mounted() {
-			this.setTableHeight();
-			window.addEventListener('resize',this.setTableHeight,false);
+			if(this.opt.height){
+				this.setTableHeight();
+				window.addEventListener('resize',this.setTableHeight,false);
+			}
 			if (!this.opt.mountedNotLoad) { //mountedNotLoad 安装时不请求接口
 				this.reload();
 			}
@@ -185,6 +187,7 @@
 		},
 		methods: {
 			setTableHeight(){
+				
 				let headerHeight=0,footerHeight=0,tableTop=0;
 				if(document.querySelector(`.table${this.id}`).querySelector('.table-top')){
 					tableTop=document.querySelector(`.table${this.id}`).querySelector('.table-top').offsetHeight;
@@ -196,12 +199,14 @@
 					footerHeight=this.opt.showSummary ? document.querySelector('.ant-table-footer').offsetHeight : 0
 				}
 				let pagination=this.opt.page ? 64 : 0;
-				this.computedHeight=parseFloat(this.opt.height) - headerHeight - footerHeight - pagination -tableTop;  //计算表格高度
+				// this.computedHeight=parseFloat(this.opt.height) - headerHeight - footerHeight - pagination -tableTop;  //计算表格高度
+				this.computedHeight=Math.abs(document.querySelector(`.table${this.id}`).offsetHeight - headerHeight - footerHeight - pagination -tableTop);  //计算表格高度
 				if(document.querySelector(`.table${this.id}`).querySelector('.ant-table-placeholder')){
 					document.querySelector(`.table${this.id}`).querySelector('.ant-table-placeholder').style.height=this.computedHeight+'px';
 					return;
 				}
-				console.log(headerHeight,footerHeight,pagination)
+				console.log(this.computedHeight)
+				// console.log(this.opt.height,'height')
 				document.querySelector(`.table${this.id}`).querySelector('.ant-table-body').style.height=this.computedHeight+'px';
 			},
 			reload: function(data) {
