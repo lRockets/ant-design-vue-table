@@ -209,11 +209,11 @@
 <style lang="scss">
 #app{
 	display:flex;
-	overflow: hidden;
 	height:100vh;
 	flex-direction: column;
 	.main-table{
 		flex:1;
+		overflow: hidden;
 	}
 }
 </style>

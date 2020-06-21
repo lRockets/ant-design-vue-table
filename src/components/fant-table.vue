@@ -205,7 +205,7 @@
 					document.querySelector(`.table${this.id}`).querySelector('.ant-table-placeholder').style.height=this.computedHeight+'px';
 					return;
 				}
-				console.log(this.computedHeight)
+				console.log(this.computedHeight,document.querySelector(`.table${this.id}`).offsetHeight)
 				// console.log(this.opt.height,'height')
 				document.querySelector(`.table${this.id}`).querySelector('.ant-table-body').style.height=this.computedHeight+'px';
 			},
