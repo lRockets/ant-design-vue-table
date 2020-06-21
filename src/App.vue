@@ -90,7 +90,7 @@
 					{
 						key: 'userName',
 						title: '使用人员',
-						dataIndex:'userName'
+						dataIndex:'userName',
 					}
 
 				],
@@ -124,8 +124,7 @@
 					showSelectText:true,
 					showTextIndex:1,
 					showSummaryIndex:[4],
-					loading:true,
-					customize:true,
+					// loading:true,
 					page: true,
 					multiple: true,
 					showSummary:true,

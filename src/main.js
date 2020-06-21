@@ -16,7 +16,6 @@ Vue.component(TreeSelect.name,TreeSelect)
 
 
 Vue.use(Table,Checkbox,Button,ConfigProvider,TreeSelect);
-// Vue.component(Table.name,Table)
 import fantCommon from '@/components/fant-common'
 Vue.use(fantCommon);
 Vue.config.productionTip = false

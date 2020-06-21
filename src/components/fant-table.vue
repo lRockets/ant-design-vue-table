@@ -18,6 +18,7 @@
 			<a-table 
 				:columns="columns" 
 				:data-source="data" 
+				 :components="components" 
 				:pagination="opt.page ? computedPagination : false" 
 				:bordered="opt.border" 
 				:size="opt.size"
@@ -56,6 +57,15 @@
 
 <script>
 	import zhCN from 'ant-design-vue/es/locale/zh_CN';
+	import Vue from 'vue';
+	import VueDraggableResizable from 'vue-draggable-resizable';
+	Vue.component('vue-draggable-resizable', VueDraggableResizable);
+	
+	
+	// import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
+	
+
+	
 	function ___getDeep(data, prop){
 		let arr = prop?prop.split('.'):[];
 		let data_ = data;
@@ -103,6 +113,42 @@
 		    }
 		},
 		data() {
+			this.opt.border ? this.components = {
+			      header: {
+			        cell: (h, props, children) => {
+			          const { key, ...restProps } = props
+			          const col = this.columns.find(col => {
+			            const k = col.dataIndex || col.key
+			            return k === key
+			          })
+			
+			          if (!col || !col.width) {
+			            return h('th', { ...restProps }, [...children])
+			          }
+			
+			          const dragProps = {
+			            key: col.dataIndex || col.key,
+			            class: 'table-draggable-handle',
+			            attrs: {
+			              w: 10,
+			              x: col.width,
+			              z: 1,
+			              axis: 'x',
+			              draggable: true,
+						  transform:'none',
+			              resizable: false
+			            },
+			            on: {
+			              dragging: (x, y) => {
+			                col.width = Math.max(x, 90)
+							// this.setTableHeight()
+			              }
+			            }
+			          }
+			          const drag = h('vue-draggable-resizable', { ...dragProps })
+			          return h('th', { ...restProps, class: 'resize-table-th' }, [...children, drag])
+			        }
+			      }} : this.components={};
 			return {
 				checkAll:false,
 				page_: {},
@@ -187,7 +233,6 @@
 		},
 		methods: {
 			setTableHeight(){
-				
 				let headerHeight=0,footerHeight=0,tableTop=0;
 				if(document.querySelector(`.table${this.id}`).querySelector('.table-top')){
 					tableTop=document.querySelector(`.table${this.id}`).querySelector('.table-top').offsetHeight;
@@ -360,11 +405,24 @@
 </script>
 
 <style scoped lang="scss">
-	
 .table{
 	display:flex;
 	position:relative;
 	flex-direction: column;
+	::v-deep .resize-table-th{
+		position:relative;
+	}
+	::v-deep .table-draggable-handle {
+		height: 100% !important;
+		bottom: 0;
+		position:absolute;
+		left: auto !important;
+		transform:none !important;
+		right: -5px;
+		z-index:100 !important;
+		cursor: col-resize;
+		touch-action: none;
+	  }
 	::v-deep .ant-table-wrapper{
 		flex:1;
 	}
@@ -420,9 +478,6 @@
 		top:0px;
 		display: block;
 	}
-	// ::v-deep .ant-table-body tr:last-child td{
-	// 	border-bottom:none !important;
-	// }
 	::v-deep .ant-table::before{
 		content:'';
 		display: block;
