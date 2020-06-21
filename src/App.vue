@@ -1,8 +1,9 @@
 <template>
 	<div id="app">
 		<a-button type="primary">1</a-button>
+		
 		<div class="main-table" ref="main">
-			<Table style="margin-bottom:300px;" ref="table" @mouseleave="mouseleave" @mouseenter="mouseenter" @select-all="selectAll" :data="tableData" :opt="tableOpt" class="formBox" :columns="columns" :page="page"  @selection-change="selectionChange">
+			<Table style="margin-bottom:300px;"  ref="table" @mouseleave="mouseleave" @mouseenter="mouseenter" @select-all="selectAll" :data="tableData" :opt="tableOpt" class="formBox" :columns="columns" :page="page"  @selection-change="selectionChange">
 				<template slot="pannel-top">
 					我是slot
 				</template>
@@ -187,6 +188,7 @@
 			}
 		},
 		mounted(){
+			console.log(this.$refs.table)
 		},
 		methods: {
 			mouseenter(row){

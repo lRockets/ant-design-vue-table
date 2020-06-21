@@ -17,7 +17,7 @@
 			</template>
 			<a-table 
 				:columns="columns" 
-				:data-source="data" 
+				:data-source="mydata" 
 				 :components="components" 
 				:pagination="opt.page ? computedPagination : false" 
 				:bordered="opt.border" 
@@ -151,6 +151,7 @@
 			      }} : this.components={};
 			return {
 				checkAll:false,
+				mydata: this.data,
 				page_: {},
 				computedHeight:300,
 				//存放上一次的参数和url
@@ -246,12 +247,6 @@
 				let pagination=this.opt.page ? 64 : 0;
 				// this.computedHeight=parseFloat(this.opt.height) - headerHeight - footerHeight - pagination -tableTop;  //计算表格高度
 				this.computedHeight=Math.abs(document.querySelector(`.table${this.id}`).offsetHeight - headerHeight - footerHeight - pagination -tableTop);  //计算表格高度
-				if(document.querySelector(`.table${this.id}`).querySelector('.ant-table-placeholder')){
-					document.querySelector(`.table${this.id}`).querySelector('.ant-table-placeholder').style.height=this.computedHeight+'px';
-					return;
-				}
-				console.log(this.computedHeight,document.querySelector(`.table${this.id}`).offsetHeight)
-				// console.log(this.opt.height,'height')
 				document.querySelector(`.table${this.id}`).querySelector('.ant-table-body').style.height=this.computedHeight+'px';
 			},
 			reload: function(data) {
@@ -277,6 +272,7 @@
 			    this.oldUrl = this.opt.url;
 			    this.oldParams = this.$deepCopy(this.opt.extendParams);
 				if(typeof this.opt.loading !== 'undefined') this.opt.loading=true;
+				 this.$set(this, "mydata",[]);
 			    this.$ajax({
 			        url: this.opt.url,
 			        emulateJSON: typeof this.opt.emulateJSON === "boolean" ? this.opt.emulateJSON : true,
@@ -308,7 +304,7 @@
 			},
 			onSelectChange(selectedRowKeys, data) {
 				this.selectedRowKeys = selectedRowKeys;
-				this.selectedRowKeys.length == this.data.length ? this.checkAll=true : this.checkAll=false;
+				this.selectedRowKeys.length == this.mydata.length ? this.checkAll=true : this.checkAll=false;
 				this.$emit('selection-change', data);
 			},
 			onSelectAll(val, selection) {
@@ -336,7 +332,7 @@
 						sums[index]=showSummaryText;
 						return;
 					}
-					let values=this.data.map(item=>Number(item[key]));
+					let values=this.mydata.map(item=>Number(item[key]));
 					// 如果有value,并且不为NaN,并且showSummaryIndex配置项有该索引 才显示
 					if(values && !values.every(item=>isNaN(item))){
 						if(this.opt.showSummaryIndex.includes(curIndex)){
@@ -364,7 +360,7 @@
 			},
 			checkedChange(){
 				if(this.checkAll){
-					this.selectedRowKeys=this.data.map(item=>item[this.opt.rowKey || 'id']);
+					this.selectedRowKeys=this.mydata.map(item=>item[this.opt.rowKey || 'id']);
 				}else{
 					this.selectedRowKeys=[];
 				}
@@ -382,7 +378,7 @@
 						         }
 						         this.selectedRowKeys = rowKeys;
 								// 修改全选状态
-								 this.selectedRowKeys.length == this.data.length ? this.checkAll=true : this.checkAll=false;
+								 this.selectedRowKeys.length == this.mydata.length ? this.checkAll=true : this.checkAll=false;
 							}
 			            },
 						mouseenter: (event) => {
@@ -457,14 +453,29 @@
 	::v-deep .ant-table-scroll{
 		overflow: hidden !important; 
 	}
-	::v-deep .ant-table-empty .ant-table-body{
-		display: none;
-	}
+	::v-deep .ant-table-empty{
+		height:100%;
+		.ant-table-scroll{
+			position:relative;
+		}
+		// .ant-table-body{
+		// 	display: none;
+		// }
+	} 
 	::v-deep .ant-table-empty .ant-table-placeholder{
-		display:flex;
-		border-top:none;
-		justify-content: center;
-		align-items:center;
+		// display:flex;
+		border:none;
+		position:absolute;
+		top:50%;
+		width:100%;
+		text-align: center;
+		background:none;
+		transform:translateY(-50%);
+		p{
+			margin-bottom:0;
+		}
+		// justify-content: center;
+		// align-items:center;
 	}
 	::v-deep .row--striped{
 		background:#ddd;
