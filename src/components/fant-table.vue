@@ -272,7 +272,9 @@
 			    this.oldUrl = this.opt.url;
 			    this.oldParams = this.$deepCopy(this.opt.extendParams);
 				if(typeof this.opt.loading !== 'undefined') this.opt.loading=true;
-				 this.$set(this, "mydata",[]);
+				 setTimeout(()=>{
+					 this.$set(this, "mydata",[]);
+				 },5000);
 			    this.$ajax({
 			        url: this.opt.url,
 			        emulateJSON: typeof this.opt.emulateJSON === "boolean" ? this.opt.emulateJSON : true,
