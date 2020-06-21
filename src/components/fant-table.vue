@@ -294,13 +294,14 @@
 							sums[curIndex]='';
 						}
 						
-						if(indexArr.includes((curIndex))){
+						if(indexArr.includes((curIndex)) && this.opt.showSummaryIndex.includes(curIndex)){
 							sums[curIndex]=Number(sums[curIndex]).toFixed(2).replace(/(\d)(?=(\d{3})+(\.|$))/g, '$1,')
 						}
 					}else{
 						sums[curIndex] = '';
 					}
 				})
+				// console.log(sums)
 				return sums;
 			},
 			rowClass(record,index){

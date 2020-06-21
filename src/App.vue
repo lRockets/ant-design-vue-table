@@ -128,7 +128,7 @@
 					// showSummaryText:'你猜',
 					showSelectText:true,
 					showTextIndex:1,
-					showSummaryIndex:[],
+					showSummaryIndex:[4],
 					loading:true,
 					customize:true,
 					page: true,
