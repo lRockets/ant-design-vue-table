@@ -118,7 +118,7 @@
 					// size: "middle",
 					width:1200,
 					spanMethod:true,
-					border:true,
+					border:false,
 					stripe:true,
 					tableTop:true,
 					// showSummaryText:'你猜',

@@ -1,5 +1,7 @@
 <template>
-	<div class="table" :style="{height:opt.height,width:opt.width,position:'relative'}" :class="[!opt.showSummary ? 'hideSummary' : '',`table${id}`]">
+	<div class="table" 
+		:style="{height:opt.height,width:opt.width,position:'relative'}" 
+		:class="[!opt.showSummary ? 'hideSummary' : '',`table${id}`,opt.border ? 'border' : 'no-border']">
 		<div class="table-top" v-if="opt.tableTop">
 			<span style="margin-left: 8px" class="top-tool">
 				<template v-if="opt.showSelectText">共{{page.total}}条数据,<span>已选择{{selectedRowKeys.length}}条</span></template>
@@ -195,9 +197,9 @@
 				return Object.assign({},this.pagination,this.page);
 			},
 			computedColumn(){
-				if(this.opt.multiple){
-					return [{key: 'selection',width:60}].concat(this.columns);
-				}
+				// if(this.opt.multiple){
+				// 	return [{key: 'selection',width:60}].concat(this.columns);
+				// }
 				return this.columns;
 			}
 		},
@@ -272,9 +274,9 @@
 			    this.oldUrl = this.opt.url;
 			    this.oldParams = this.$deepCopy(this.opt.extendParams);
 				if(typeof this.opt.loading !== 'undefined') this.opt.loading=true;
-				 setTimeout(()=>{
-					 this.$set(this, "mydata",[]);
-				 },5000);
+				 // setTimeout(()=>{
+					//  this.$set(this, "mydata",[]);
+				 // },5000);
 			    this.$ajax({
 			        url: this.opt.url,
 			        emulateJSON: typeof this.opt.emulateJSON === "boolean" ? this.opt.emulateJSON : true,
@@ -410,6 +412,33 @@
 	::v-deep .resize-table-th{
 		position:relative;
 	}
+	::v-deep .ant-table-header{margin-bottom: -18px !important;}
+	::v-deep .ant-table-thead th,::v-deep .ant-table-header{
+		background:#F6F8FB;
+	}
+	&.no-border ::v-deep{
+		.ant-table-content::before{
+			display: none;
+		}
+		.ant-table-body::before{
+			display: none;
+		}
+		.ant-table-tbody > tr > td,.ant-table-thead > tr > th{
+			border:none;
+		}
+		.ant-table-fixed::after{
+			display: none;
+		}
+		.ant-table::before{
+			display: none;
+		}
+		.ant-table-footer::before{
+			top:-1px;
+		}
+		.ant-table-body{
+			border:none;
+		}
+	} 
 	::v-deep .table-draggable-handle {
 		height: 100% !important;
 		bottom: 0;
@@ -460,9 +489,6 @@
 		.ant-table-scroll{
 			position:relative;
 		}
-		// .ant-table-body{
-		// 	display: none;
-		// }
 	} 
 	::v-deep .ant-table-empty .ant-table-placeholder{
 		// display:flex;
@@ -476,11 +502,9 @@
 		p{
 			margin-bottom:0;
 		}
-		// justify-content: center;
-		// align-items:center;
 	}
 	::v-deep .row--striped{
-		background:#ddd;
+		background:#FCFCFC;
 	}
 	::v-deep .ant-table-footer{
 		padding:0 !important;
@@ -507,7 +531,7 @@
 		height:100%;
 		background: #e8e8e8;
 	}
-	::v-deep .ant-table-body::before{
+	::v-deep .ant-table-content::before{
 		content:'';
 		display: block;
 		width:1px;
@@ -515,6 +539,7 @@
 		right:0;
 		top:0;
 		height:100%;
+		z-index:10;
 		background: #e8e8e8;
 	}
 	::v-deep .ant-table-fixed{
