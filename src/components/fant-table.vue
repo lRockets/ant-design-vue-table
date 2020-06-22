@@ -1,6 +1,6 @@
 <template>
 	<div class="table" 
-		:style="{height:opt.height,width:opt.width,position:'relative'}" 
+		:style="{height:opt.height,position:'relative'}" 
 		:class="[!opt.showSummary ? 'hideSummary' : '',`table${id}`,opt.border ? 'border' : 'no-border']">
 		<div class="table-top" v-if="opt.tableTop">
 			<span style="margin-left: 8px" class="top-tool">
@@ -27,10 +27,13 @@
 				:rowSelection="opt.multiple ? {type:'checkbox',onChange:onSelectChange,selectedRowKeys,onSelectAll} : undefined"
 				:loading="opt.loading" 
 				:row-key="opt.rowKey || 'id'"
-				:scroll="opt.height ? { x: '100%', y: computedHeight } : {x:'100%'}"
+				:scroll="opt.height ? { x:opt.width || '100%', y: computedHeight } : {x:'100%'}"
 				 @change="pageChange"
 				 :rowClassName="rowClass"
 				:customRow="onClickRow">
+				<template slot="action"  slot-scope="text">
+					ewr
+				</template>
 				<template slot="footer" slot-scope="scope" v-if="opt.showSummary">
 					<template v-if="$slots.footer">
 						<div style="padding:16px;">
@@ -197,9 +200,9 @@
 				return Object.assign({},this.pagination,this.page);
 			},
 			computedColumn(){
-				// if(this.opt.multiple){
-				// 	return [{key: 'selection',width:60}].concat(this.columns);
-				// }
+				if(this.opt.multiple){
+					return [{key: 'selection',width:60}].concat(this.columns);
+				}
 				return this.columns;
 			}
 		},
@@ -249,7 +252,7 @@
 				let pagination=this.opt.page ? 64 : 0;
 				// this.computedHeight=parseFloat(this.opt.height) - headerHeight - footerHeight - pagination -tableTop;  //计算表格高度
 				this.computedHeight=Math.abs(document.querySelector(`.table${this.id}`).offsetHeight - headerHeight - footerHeight - pagination -tableTop);  //计算表格高度
-				document.querySelector(`.table${this.id}`).querySelector('.ant-table-body').style.height=this.computedHeight+'px';
+				document.querySelector(`.table${this.id}`).querySelector('.ant-table-scroll .ant-table-body').style.height=this.computedHeight+'px';
 			},
 			reload: function(data) {
 			    if (!this.opt.url || (typeof this.opt.readyLoad != "undefined" && !this.opt.readyLoad)) {
@@ -412,7 +415,13 @@
 	::v-deep .resize-table-th{
 		position:relative;
 	}
-	::v-deep .ant-table-header{margin-bottom: -18px !important;}
+	// ::v-deep .ant-table-fixed-header .ant-table-body-inner{
+	// 	overflow:auto !important;
+	// }
+	// ::v-deep .ant-table-row{
+	// 	height: auto !important;
+	// }
+	// ::v-deep .ant-table-header{margin-bottom: -18px !important;}
 	::v-deep .ant-table-thead th,::v-deep .ant-table-header{
 		background:#F6F8FB;
 	}

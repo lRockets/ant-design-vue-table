@@ -19,6 +19,15 @@
 <script>
 	import Table from '@/components/fant-table';
 	import {mergeCell} from '@/utils/tools';
+	const data = [];
+	for (let i = 0; i < 8; i++) {
+	  data.push({
+	    key: i,
+	    name: `Edrward ${i}`,
+	    age: 32,
+	    address: `London Park no. ${i}`,
+	  });
+	}
 	export default {
 		components: {
 			Table
@@ -26,7 +35,26 @@
 		data() {
 			return {
 				value1:1,
-				columns: [{
+				columns:[{ title: 'Full Name', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
+				  { title: 'Age', width: 100, dataIndex: 'age', key: 'age', fixed: 'left' },
+				  { title: 'Column 1', dataIndex: 'address', key: '1', width: 150 },
+				  { title: 'Column 2', dataIndex: 'address', key: '2', width: 150 },
+				  { title: 'Column 3', dataIndex: 'address', key: '3', width: 150 },
+				  { title: 'Column 4', dataIndex: 'address', key: '4', width: 150 },
+				  { title: 'Column 5', dataIndex: 'address', key: '5', width: 150 },
+				  { title: 'Column 6', dataIndex: 'address', key: '6', width: 150 },
+				  { title: 'Column 7', dataIndex: 'address', key: '7', width: 150 },
+				  { title: 'Column 8', dataIndex: 'address', key: '8', width: 150  },
+				  {
+					title: 'Action',
+					key: 'operation',
+					fixed: 'right',
+					// scopedSlots: { customRender: 'action' }
+					customRender: (value, row, index) =>{
+						return <a-button type="primary" on-click={()=>this.click(row)}>1</a-button>
+					}
+				  }],
+				columns2: [{
 						key: 'edit',
 						title: '操作',
 						align: 'center',
@@ -95,7 +123,8 @@
 					}
 
 				],
-				tableData: [{
+				tableData:data,
+				tableData2: [{
 					name: "教学楼",
 					id:1,
 					floor:1,
@@ -116,9 +145,10 @@
 				}],
 				tableOpt: {
 					// size: "middle",
-					width:1200,
+					width:1300,
+					rowKey:'key',
 					spanMethod:true,
-					border:false,
+					border:true,
 					stripe:true,
 					tableTop:true,
 					// showSummaryText:'你猜',
@@ -193,6 +223,9 @@
 		methods: {
 			mouseenter(row){
 				// console.log(row)
+			},
+			click(row){
+				console.log(row,'row')
 			},
 			mouseleave(row){
 				// console.log(row,'mouseleave')
